@@ -17,7 +17,6 @@ return {
       "flake8",
       "hadolint",
       "html-lsp",
-      "intelephense",
       "nginx-language-server",
       "prettierd",
       "pyright",

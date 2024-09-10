@@ -14,12 +14,35 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- General/Global LSP Configuration
+local api = vim.api
+local lsp = vim.lsp
+
+local make_client_capabilities = lsp.protocol.make_client_capabilities
+function lsp.protocol.make_client_capabilities()
+    local caps = make_client_capabilities()
+    if not (caps.workspace or {}).didChangeWatchedFiles then
+        vim.notify(
+            'lsp capability didChangeWatchedFiles is already disabled',
+            vim.log.levels.WARN
+        )
+    else
+        caps.workspace.didChangeWatchedFiles = nil
+    end
+
+    return caps
+end
+
 require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     -- import/override with your plugins
     { import = "plugins" },
+	-- GruzBox
+	{ "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...},
+	{ "folke/tokyonight.nvim", lazy = false, priority = 1000, opts = {}, },
+	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
@@ -30,7 +53,7 @@ require("lazy").setup({
     version = false, -- always use the latest git commit
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
-  install = { colorscheme = { "tokyonight", "habamax" } },
+  install = { colorscheme = { "catppuccin" } },
   checker = {
     enabled = true, -- check for plugin updates periodically
     notify = false, -- notify on update
