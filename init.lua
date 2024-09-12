@@ -6,46 +6,51 @@ vim.opt.tabstop = 4
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 
-local lsp = require 'lsp-zero'
-
-lsp.configure('intelephense', {
-    settings = {
-        intelephense = {
-            telemetry = {
-                enabled = false
-            },
-            environment = {
-                includePaths = {
-                    "[...redacted...]/phpunit/vendor/**"
-                }
-            }
-        }
-    }
-})
-
-vim.g.startup_dir = vim.fn.getcwd()
-local lspconfig = require('lspconfig')
-
-lspconfig.intelephense.setup({
-  cmd = {"intelephense"},
-  filetypes = {"php"},
-  root_dir = function()
-    return vim.g.startup_dir
-  end,
+-- Setup lspconfig for intelephense
+require('lspconfig').intelephense.setup({
+  cmd = { "intelephense", '--stdio' },
+  filetypes = { "php" },
+  root_dir = function(pattern)
+	  return vim.fn.getcwd()
+	end,
   settings = {
     intelephense = {
-      environment = {
-        phpVersion = '8.3',
+      telemetry = {
+        enabled = false
       },
-      files = {
-        maxSize = 5000000,
-      },
-    },
-  },
+	  files = {
+        maxSize = 1000000;
+      }
+    }
+  }
 })
 
--- Setup lspconfig.
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- Autocmp
+local cmp = require('cmp')
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+	["<C-b>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-e>"] = cmp.mapping.abort(),
+    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'path' },
+  },
+  capabilities = lsp_capabilities,
+})
+
+-- Setup lspconfig with capabilities
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
 -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
 require('lspconfig')['omnisharp'].setup {
   capabilities = capabilities
