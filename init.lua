@@ -6,6 +6,9 @@ vim.opt.tabstop = 4
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 
+vim.o.background = "" -- or "light" for light mode
+vim.cmd("colorscheme kanagawa-dragon")
+
 -- Setup lspconfig for intelephense
 require('lspconfig').intelephense.setup({
   cmd = { "intelephense", '--stdio' },
