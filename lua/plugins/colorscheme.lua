@@ -1,5 +1,5 @@
 return {
-	{
+	--[[{
 		"LazyVim/LazyVim",
 		opts = {
 			colorscheme = function()
@@ -31,5 +31,5 @@ return {
 			dark = "dragon",           -- try "dragon" !
 			light = "lotus"
 		},
-	},
+	},]]--
 }

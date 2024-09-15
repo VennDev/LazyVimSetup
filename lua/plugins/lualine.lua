@@ -1,12 +1,48 @@
 require'nvim-web-devicons'.get_icon(filename, extension, options)
 local icons = require("config.icons")
 return {
+	--[[{
+		'xiyaowong/nvim-transparent',
+		enable = true,
+		extra_groups = {
+			'lualine_a',
+			'lualine_b',
+			'lualine_c',
+			'lualine_x',
+			'lualine_y',
+			'lualine_z',
+		},
+	},]]--
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "User LazyFile",
 		opts = {
 		  options = {
 			globalstatus = true,
+			theme = {
+				normal = {
+					a = { fg = '#ffffff', bg = '#005f87', gui = 'bold' },
+					b = { fg = '#ffffff', bg = '#000000' },
+					c = { fg = '#8c8c8c', bg = 'none' },
+				},
+				insert = {
+					a = { fg = '#ffffff', bg = '#008700', gui = 'bold' },
+				},
+				visual = {
+					a = { fg = '#ffffff', bg = '#73267a', gui = 'bold' },
+				},
+				replace = {
+					a = { fg = '#ffffff', bg = '#870000', gui = 'bold' },
+				},
+				command = {
+					a = { fg = '#ffffff', bg = '#cf913a', gui = 'bold' },
+				},
+				terminal = {
+					a = { fg = '#ffffff', bg = '#99034c', gui = 'bold' },
+				},
+			},
+			section_separators = { left = '', right = '' },
+			component_separators = { left = '|', right = '|' },
 		  },
 		  sections = {
 			lualine_a = { { "mode", icon = "" } },
@@ -14,7 +50,7 @@ return {
 			lualine_c = {
 			  {
 				"filename",
-				path = 1,
+				path = 4,
 				symbols = {
 				  modified = icons.file.modified,
 				  readonly = icons.file.readonly,
