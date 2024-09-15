@@ -39,17 +39,19 @@ require("lazy").setup({
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     -- import/override with your plugins
     { import = "plugins" },
-	-- GruzBox
+	
+	-- Themes
 	{ "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...},
-	-- tokyonight
 	{ "folke/tokyonight.nvim", lazy = false, priority = 1000, opts = {}, },
-	-- catppuccin
 	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 	
+	-- Some plugins addition
 	{'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
 	{'neovim/nvim-lspconfig'},
 	{'hrsh7th/cmp-nvim-lsp'},
 	{'hrsh7th/nvim-cmp'},
+	{'f-person/git-blame.nvim'},
+	{'nvim-tree/nvim-web-devicons'},
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
