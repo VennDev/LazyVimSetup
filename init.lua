@@ -4,14 +4,18 @@ require("config.lazy")
 vim.o.encoding = "utf-8"
 vim.o.fileencoding = "utf-8"
 
-vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 
+-- Setup for theme
 vim.o.background = "" -- or "light" for light mode
--- vim.cmd("colorscheme kanagawa-dragon")
-vim.cmd('colorscheme github_dark_default')
+vim.cmd("colorscheme kanagawa-dragon")
+-- vim.cmd("colorscheme kanagawa")
+-- vim.cmd('colorscheme github_dark_default')
 -- vim.cmd("colorscheme github_dark_dimmed")
 -- vim.cmd("colorscheme github_dark_high_contrast")
 -- vim.cmd('colorscheme github_dark_tritanopia')
@@ -28,11 +32,28 @@ require("lspconfig").intelephense.setup({
             telemetry = {
                 enabled = false,
             },
-            files = {
-                maxSize = 1000000,
-            },
         },
     },
+})
+
+-- conform
+require("conform").setup({
+    formatters_by_ft = {
+        lua = { "stylua" },
+        -- Conform will run multiple formatters sequentially
+        python = { "isort", "black" },
+        -- You can customize some of the format options for the filetype (:help conform.format)
+        rust = { "rustfmt", lsp_format = "fallback" },
+        -- Conform will run the first available formatter
+        javascript = { "prettierd", "prettier", stop_after_first = true },
+    },
+    format_on_save = function(bufnr)
+        -- Disable with a global or buffer-local variable
+        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+            return
+        end
+        return { timeout_ms = 500, lsp_format = "fallback" }
+    end,
 })
 
 -- Autocmp
@@ -49,7 +70,13 @@ cmp.setup({
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
         ["<C-e>"] = cmp.mapping.abort(),
-        ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        ['<CR>'] = cmp.mapping(function(fallback)
+		  if cmp.visible() then
+			cmp.confirm({ select = true }) -- Chấp nhận gợi ý nếu autocomplete đang hiện
+		  else
+			fallback() -- Thực hiện hành động mặc định nếu không có gợi ý
+		  end
+		end),
     },
     sources = {
         { name = "nvim_lsp" },

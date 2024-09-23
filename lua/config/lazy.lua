@@ -44,8 +44,9 @@ require("lazy").setup({
 	-- { "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...},
 	-- { "folke/tokyonight.nvim", lazy = false, priority = 1000, opts = {}, },
 	-- { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+	{ "rebelot/kanagawa.nvim" },
 	-- Or with configuration
-	{
+	--[[{
 	  'projekt0n/github-nvim-theme',
 	  lazy = false, -- make sure we load this during startup if it is your main colorscheme
 	  priority = 1000, -- make sure to load this before all the other start plugins
@@ -56,7 +57,23 @@ require("lazy").setup({
 
 		vim.cmd('colorscheme github_dark')
 	  end,
-	},
+	},]]--
+	--[[{
+	  "xero/miasma.nvim",
+	  lazy = false,
+	  priority = 1000,
+	  config = function()
+		vim.cmd("colorscheme miasma")
+	  end,
+	},]]--
+	--[[{
+		"ramojus/mellifluous.nvim",
+		-- version = "v0.*", -- uncomment for stable config (some features might be missed if/when v1 comes out)
+		config = function()
+			require("mellifluous").setup({}) -- optional, see configuration section.
+			vim.cmd("colorscheme mellifluous")
+		end,
+	},]]--
 	
 	-- Some plugins addition
 	{'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
@@ -65,6 +82,17 @@ require("lazy").setup({
 	{'hrsh7th/nvim-cmp'},
 	{'f-person/git-blame.nvim'},
 	{'nvim-tree/nvim-web-devicons'},
+	{
+	  'stevearc/conform.nvim',
+	  opts = {},
+	},
+	-- add this to your lua/plugins.lua, lua/plugins/init.lua,  or the file you keep your other plugins:
+	{
+		'numToStr/Comment.nvim',
+		opts = {
+			-- add any options here
+		}
+	},
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
