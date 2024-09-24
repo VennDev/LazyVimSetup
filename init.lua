@@ -39,6 +39,7 @@ require("lspconfig").intelephense.setup({
 -- conform
 require("conform").setup({
     formatters_by_ft = {
+		php = { "php-cs-fixer" },
         lua = { "stylua" },
         -- Conform will run multiple formatters sequentially
         python = { "isort", "black" },
