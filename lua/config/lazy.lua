@@ -14,86 +14,33 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- General/Global LSP Configuration
-local api = vim.api
-local lsp = vim.lsp
+local spec = {
+  -- add LazyVim and import its plugins
+  { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+  -- import any extras modules here
+  { import = "lazyvim.plugins.extras.lang.typescript" },
+  { import = "lazyvim.plugins.extras.formatting.prettier" },
+  { import = "lazyvim.plugins.extras.linting.eslint" },
+  -- { import = "lazyvim.plugins.extras.lang.tailwind" },
+  { import = "lazyvim.plugins.extras.lang.markdown" },
+  { import = "lazyvim.plugins.extras.dap.core" },
+  { import = "lazyvim.plugins.extras.ui.mini-indentscope" },
+  { import = "lazyvim.plugins.extras.lang.astro" },
+  -- { import = "lazyvim.plugins.extras.lang.json" },
+  -- { import = "lazyvim.plugins.extras.ui.mini-animate" },
+  -- import/override with your plugins
+  { import = "plugins" },
+}
 
-local make_client_capabilities = lsp.protocol.make_client_capabilities
-function lsp.protocol.make_client_capabilities()
-    local caps = make_client_capabilities()
-    if not (caps.workspace or {}).didChangeWatchedFiles then
-        vim.notify(
-            'lsp capability didChangeWatchedFiles is already disabled',
-            vim.log.levels.WARN
-        )
-    else
-        caps.workspace.didChangeWatchedFiles = nil
-    end
-
-    return caps
+-- plugins that should not be added on termux, i.e. on android
+if not vim.env.TERMUX_VERSION then
+  table.insert(spec, {
+    -- import = "lazyvim.plugins.extras.ui.treesitter-context",
+  })
 end
 
 require("lazy").setup({
-  spec = {
-    -- add LazyVim and import its plugins
-    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    -- import/override with your plugins
-    { import = "plugins" },
-	
-	-- Themes
-	-- { "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...},
-	-- { "folke/tokyonight.nvim", lazy = false, priority = 1000, opts = {}, },
-	-- { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-	{ "rebelot/kanagawa.nvim" },
-	-- Or with configuration
-	--[[{
-	  'projekt0n/github-nvim-theme',
-	  lazy = false, -- make sure we load this during startup if it is your main colorscheme
-	  priority = 1000, -- make sure to load this before all the other start plugins
-	  config = function()
-		require('github-theme').setup({
-		  -- ...
-		})
-
-		vim.cmd('colorscheme github_dark')
-	  end,
-	},]]--
-	--[[{
-	  "xero/miasma.nvim",
-	  lazy = false,
-	  priority = 1000,
-	  config = function()
-		vim.cmd("colorscheme miasma")
-	  end,
-	},]]--
-	--[[{
-		"ramojus/mellifluous.nvim",
-		-- version = "v0.*", -- uncomment for stable config (some features might be missed if/when v1 comes out)
-		config = function()
-			require("mellifluous").setup({}) -- optional, see configuration section.
-			vim.cmd("colorscheme mellifluous")
-		end,
-	},]]--
-	
-	-- Some plugins addition
-	{'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
-	{'neovim/nvim-lspconfig'},
-	{'hrsh7th/cmp-nvim-lsp'},
-	{'hrsh7th/nvim-cmp'},
-	{'f-person/git-blame.nvim'},
-	{'nvim-tree/nvim-web-devicons'},
-	{
-	  'stevearc/conform.nvim',
-	  opts = {},
-	},
-	-- add this to your lua/plugins.lua, lua/plugins/init.lua,  or the file you keep your other plugins:
-	{
-		'numToStr/Comment.nvim',
-		opts = {
-			-- add any options here
-		}
-	},
-  },
+  spec = spec,
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
     -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
@@ -103,11 +50,10 @@ require("lazy").setup({
     version = false, -- always use the latest git commit
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
-  install = {},
+  install = { colorscheme = { "tokyonight" } },
   checker = {
-    enabled = true, -- check for plugin updates periodically
-    notify = false, -- notify on update
-  }, -- automatically check for plugin updates
+    enabled = false, -- automatically check for plugin updates
+  },
   performance = {
     rtp = {
       -- disable some rtp plugins
