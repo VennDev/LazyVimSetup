@@ -32,9 +32,15 @@ return {
     opts = {
       draw = {
         animation = function()
-          return 0
+          -- return 10  -- top-to-bottom animation
+          -- return -10 -- bottom-to-top animation
+          -- return 0   -- no animation
+          return 10     -- current setting
         end,
+        delay = 50,
+        priority = 2,
       },
+      symbol = "│",
     },
   },
   -- {
