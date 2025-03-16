@@ -82,6 +82,23 @@ vim.cmd([[
   command! -nargs=0 CopyRelativePath :let @+=expand('%:p:~:.')
 ]])
 
+-- Add transparency settings
+vim.o.winblend = 20  -- Reduced window transparency (0-100)
+vim.o.pumblend = 20  -- Reduced popup menu transparency (0-100)
+
+-- Cmdline transparency and appearance
+vim.o.cmdheight = 1  -- Ensure command line has enough height
+vim.opt.showcmdloc = "statusline"  -- Show command in statusline
+
+-- Improve cmdline visibility
+vim.o.wildmode = "longest:full,full"
+vim.o.wildoptions = "pum"  -- Use popup menu for command completion
+
+-- Enable true color support
+if vim.fn.has("termguicolors") then
+  vim.o.termguicolors = true
+end
+
 -- statusline & tabline
 -- vim.o.laststatus = 3
 -- vim.o.statusline = " %f %m%=%-15.(%l,%c%) %P "

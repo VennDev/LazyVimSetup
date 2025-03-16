@@ -30,6 +30,52 @@ local spec = {
   -- { import = "lazyvim.plugins.extras.ui.mini-animate" },
   -- import/override with your plugins
   { import = "plugins" },
+  -- Add transparent colorscheme
+  {
+    "xiyaowong/transparent.nvim",
+    config = function()
+      require("transparent").setup({
+        groups = { -- table: default groups
+          'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
+          'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
+          'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
+          'SignColumn', 'CursorLineNr', 'EndOfBuffer',
+        },
+        extra_groups = {
+          "NormalFloat", -- plugins which have float panel such as cmp, lazy, mason, etc.
+          "NvimTreeNormal" -- NvimTree
+        },
+        exclude_groups = {}, -- table: groups you don't want to clear
+      })
+    end
+  },
+  -- Improve cmdline appearance
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      lsp = {
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true,
+        },
+      },
+      presets = {
+        bottom_search = true,
+        command_palette = true,
+        long_message_to_split = true,
+        inc_rename = false,
+      },
+      cmdline = {
+        view = "cmdline",
+      },
+    },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    },
+  },
 }
 
 -- plugins that should not be added on termux, i.e. on android
